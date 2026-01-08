@@ -1,0 +1,2538 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>李浩霖的博客 - 游戏、美食与技术的融合之地</title>
+  <!-- 引入外部资源 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
+  <style>
+    /* 全局重置与变量定义 - 统一样式核心 */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Microsoft YaHei", "微软雅黑", sans-serif;
+    }
+    :root {
+      --primary: #e62e38;
+      --primary-hover: #c9252f;
+      --text-dark: #333;
+      --text-gray: #666;
+      --text-light: #999;
+      --bg-light: #f8f9fa;
+      --border-light: #eee;
+      --shadow: 0 2px 4px rgba(0,0,0,0.08);
+      --shadow-hover: 0 4px 8px rgba(0,0,0,0.15);
+      --transition: all 0.3s ease;
+    }
+    body {
+      background-color: #f5f5f5;
+      color: var(--text-dark);
+      line-height: 1.6;
+    }
+    a {
+      text-decoration: none;
+      color: inherit;
+      transition: var(--transition);
+    }
+    ul, ol {
+      list-style: none;
+    }
+    .container {
+      width: 90%;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .btn {
+      display: inline-block;
+      padding: 8px 16px;
+      background-color: var(--primary);
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: var(--transition);
+      font-size: 14px;
+    }
+    .btn:hover {
+      background-color: var(--primary-hover);
+    }
+    .btn-outline {
+      background: transparent;
+      border: 1px solid var(--primary);
+      color: var(--primary);
+    }
+    .btn-outline:hover {
+      background: var(--primary);
+      color: #fff;
+    }
+    .section-title {
+      font-size: 24px;
+      color: var(--text-dark);
+      margin-bottom: 15px;
+      position: relative;
+      padding-bottom: 10px;
+    }
+    .section-title::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 60px;
+      height: 2px;
+      background-color: var(--primary);
+    }
+    .blog-description {
+      color: var(--text-gray);
+      font-size: 16px;
+      line-height: 1.6;
+    }
+
+    /* 页面切换核心样式 - 确保所有页面正常切换 */
+    .page-content {
+      display: none !important; /* 强制隐藏，解决优先级冲突 */
+      min-height: calc(100vh - 120px);
+      padding: 20px 0;
+    }
+    .page-content.active {
+      display: block !important; /* 强制显示激活页面 */
+    }
+
+    /* 头部导航 - 统一导航栏样式 */
+    header {
+      background-color: #fff;
+      box-shadow: var(--shadow);
+      padding: 15px 0;
+      position: sticky;
+      top: 0;
+      z-index: 9999; /* 提升层级，避免被遮挡 */
+    }
+    .nav-wrap {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .logo {
+      font-size: 22px;
+      font-weight: bold;
+      color: var(--primary);
+    }
+    .desktop-nav {
+      display: block;
+    }
+    .desktop-nav ul {
+      display: flex;
+      gap: 30px;
+    }
+    .desktop-nav li a {
+      font-size: 14px;
+      padding: 5px 0;
+      border-bottom: 2px solid transparent;
+    }
+    .desktop-nav li a:hover,
+    .desktop-nav li a.active {
+      color: var(--primary);
+      border-bottom-color: var(--primary);
+    }
+    .mobile-menu-btn {
+      display: none;
+      font-size: 22px;
+      cursor: pointer;
+      color: var(--text-dark);
+    }
+    .mobile-nav {
+      display: none;
+      background-color: #fff;
+      margin-top: 10px;
+      padding: 15px 0;
+      box-shadow: var(--shadow);
+    }
+    .mobile-nav ul {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      align-items: center;
+    }
+    .mobile-nav li a {
+      font-size: 16px;
+      padding: 8px 20px;
+      width: 100%;
+      text-align: center;
+    }
+    .mobile-nav li a.active {
+      background-color: rgba(230, 46, 56, 0.1);
+      color: var(--primary);
+      border-radius: 4px;
+    }
+
+    /* 首页样式 */
+    .profile-section {
+      background-color: var(--bg-light);
+      padding: 60px 0;
+      text-align: center;
+    }
+    .profile-avatar {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin: 0 auto 20px;
+      border: 3px solid var(--border-light);
+      animation: bounce 1.5s infinite ease-in-out;
+    }
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+    .profile-name {
+      font-size: 24px;
+      margin-bottom: 10px;
+    }
+    .profile-motto {
+      color: var(--text-gray);
+      font-style: italic;
+      margin-bottom: 20px;
+    }
+    .profile-social a {
+      font-size: 18px;
+      margin: 0 10px;
+      color: var(--text-dark);
+    }
+    .profile-social a:hover {
+      color: var(--primary);
+      transform: translateY(-3px);
+    }
+    .home-articles {
+      padding: 40px 0;
+    }
+    .home-articles .section-title {
+      font-size: 20px;
+      margin-bottom: 30px;
+    }
+    .article-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 25px;
+    }
+    .article-card {
+      background-color: #fff;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      transition: var(--transition);
+    }
+    .article-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-hover);
+    }
+    .article-card img {
+      width: 100%;
+      height: 160px;
+      object-fit: cover;
+    }
+    .article-card h3 {
+      font-size: 16px;
+      padding: 15px;
+    }
+    .article-card p {
+      font-size: 14px;
+      color: var(--text-gray);
+      padding: 0 15px 15px;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .article-meta {
+      display: flex;
+      justify-content: space-between;
+      padding: 0 15px 15px;
+      font-size: 12px;
+      color: var(--text-light);
+    }
+    .tags-section {
+      background-color: var(--bg-light);
+      padding: 40px 0;
+      text-align: center;
+    }
+    .tags-cloud {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 20px;
+    }
+    .tag {
+      padding: 6px 16px;
+      background-color: #fff;
+      border-radius: 20px;
+      font-size: 14px;
+      box-shadow: var(--shadow);
+      transition: var(--transition);
+    }
+    .tag:hover {
+      background-color: var(--primary);
+      color: #fff;
+      transform: scale(1.05);
+    }
+
+    /* 文章列表页样式 */
+    .articles-page {
+      display: flex;
+      gap: 30px;
+      padding: 40px 0;
+    }
+    .articles-main {
+      flex: 3;
+    }
+    .page-header {
+      margin-bottom: 30px;
+      padding-bottom: 15px;
+      border-bottom: 1px solid var(--border-light);
+    }
+    .page-header h2 {
+      font-size: 22px;
+      margin-bottom: 5px;
+    }
+    .page-header p {
+      color: var(--text-gray);
+      font-size: 14px;
+    }
+    .filter-bar {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 25px;
+    }
+    .filter-btn {
+      padding: 6px 14px;
+      border: 1px solid var(--border-light);
+      border-radius: 4px;
+      cursor: pointer;
+      transition: var(--transition);
+      font-size: 14px;
+    }
+    .filter-btn.active,
+    .filter-btn:hover {
+      background-color: var(--primary);
+      color: #fff;
+      border-color: var(--primary);
+    }
+    .article-list {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .article-item {
+      display: flex;
+      gap: 20px;
+      background-color: #fff;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+    .article-item-img {
+      width: 180px;
+      height: 120px;
+      flex-shrink: 0;
+      object-fit: cover;
+    }
+    .article-item-content {
+      padding: 15px 0;
+      flex-grow: 1;
+    }
+    .article-item-title {
+      font-size: 18px;
+      margin-bottom: 8px;
+    }
+    .article-item-title:hover {
+      color: var(--primary);
+    }
+    .article-item-excerpt {
+      font-size: 14px;
+      color: var(--text-gray);
+      margin-bottom: 10px;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .article-item-meta {
+      font-size: 12px;
+      color: var(--text-light);
+      display: flex;
+      gap: 15px;
+    }
+    .pagination {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 30px;
+    }
+    .pagination-btn {
+      padding: 8px 12px;
+      border: 1px solid var(--border-light);
+      border-radius: 4px;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    .pagination-btn.active,
+    .pagination-btn:hover {
+      background-color: var(--primary);
+      color: #fff;
+      border-color: var(--primary);
+    }
+
+    /* 侧边栏通用样式 */
+    .sidebar {
+      flex: 1;
+    }
+    .sidebar-widget {
+      background-color: #fff;
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: var(--shadow);
+    }
+    .sidebar-widget h3 {
+      font-size: 16px;
+      margin-bottom: 15px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border-light);
+    }
+    .hot-articles li {
+      margin-bottom: 10px;
+    }
+    .hot-articles a {
+      font-size: 14px;
+      color: var(--text-gray);
+      display: block;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .hot-articles a:hover {
+      color: var(--primary);
+      transform: translateX(5px);
+    }
+    .category-stats li {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 8px;
+      font-size: 14px;
+      color: var(--text-gray);
+    }
+
+    /* 关于我页面样式 */
+    .about-page {
+      display: flex;
+      gap: 30px;
+      padding: 40px 0;
+    }
+    .about-main {
+      flex: 3;
+      background-color: #fff;
+      border-radius: 8px;
+      padding: 30px;
+      box-shadow: var(--shadow);
+    }
+    .about-title {
+      font-size: 20px;
+      padding-bottom: 15px;
+      border-bottom: 2px solid var(--primary);
+      margin-bottom: 20px;
+    }
+    .info-card {
+      display: flex;
+      align-items: center;
+      gap: 30px;
+      margin-bottom: 30px;
+      padding-bottom: 20px;
+      border-bottom: 1px dashed var(--border-light);
+    }
+    .avatar {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+    .info-detail h3 {
+      font-size: 24px;
+      margin-bottom: 10px;
+    }
+    .signature {
+      color: var(--text-gray);
+      font-style: italic;
+      margin-bottom: 15px;
+    }
+    .info-list {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      font-size: 14px;
+    }
+    .info-list li {
+      display: flex;
+      gap: 8px;
+    }
+    .info-list li span:first-child {
+      color: var(--text-light);
+    }
+    .intro, .skills {
+      margin-bottom: 30px;
+      padding-bottom: 20px;
+      border-bottom: 1px dashed var(--border-light);
+    }
+    .intro h4, .skills h4 {
+      font-size: 16px;
+      margin-bottom: 15px;
+    }
+    .intro p {
+      color: var(--text-gray);
+      text-indent: 2em;
+      margin-bottom: 10px;
+    }
+    .skill-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .skill-tag {
+      padding: 6px 14px;
+      background-color: var(--bg-light);
+      border-radius: 4px;
+      font-size: 14px;
+    }
+    .stats {
+      display: flex;
+      justify-content: space-around;
+      text-align: center;
+    }
+    .stat-item .stat-num {
+      font-size: 28px;
+      color: var(--primary);
+      font-weight: bold;
+    }
+    .stat-item .stat-text {
+      font-size: 13px;
+      color: var(--text-light);
+    }
+
+    /* 明日方舟攻略详情页样式 */
+    .article-detail-page {
+      display: flex;
+      gap: 30px;
+      padding: 40px 0;
+    }
+    .article-content-wrap {
+      flex: 3;
+    }
+    .article-header {
+      text-align: center;
+      padding-bottom: 2rem;
+      margin-bottom: 3rem;
+      border-bottom: 1px solid var(--border-light);
+    }
+    .article-meta {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin-bottom: 1.5rem;
+      font-size: 14px;
+      color: var(--text-light);
+    }
+    .article-subtitle {
+      font-size: 1.2rem;
+      color: var(--text-gray);
+      font-style: italic;
+      margin-top: 1rem;
+    }
+    .featured-image {
+      margin: 2rem 0 3rem;
+      text-align: center;
+    }
+    .featured-image img {
+      width: 100%;
+      max-height: 500px;
+      object-fit: cover;
+      border-radius: 10px;
+      box-shadow: var(--shadow);
+    }
+    .image-caption {
+      color: var(--text-light);
+      font-size: 0.9rem;
+      margin-top: 0.5rem;
+      font-style: italic;
+    }
+    .article-body {
+      font-size: 1.1rem;
+    }
+    .article-body h2 {
+      font-size: 1.8rem;
+      margin: 2.5rem 0 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid var(--border-light);
+    }
+    .article-body h3 {
+      font-size: 1.4rem;
+      margin: 2rem 0 1rem;
+    }
+    .article-body h4 {
+      font-size: 1.2rem;
+      margin: 1.5rem 0 0.8rem;
+    }
+    .article-body p {
+      margin-bottom: 1.5rem;
+      color: var(--text-gray);
+    }
+    .article-body ul, .article-body ol {
+      margin: 1.5rem 0;
+      padding-left: 2rem;
+      color: var(--text-gray);
+    }
+    .article-body ul {
+      list-style: disc;
+    }
+    .article-body ol {
+      list-style: decimal;
+    }
+    .article-body blockquote {
+      border-left: 4px solid var(--primary);
+      padding: 1.5rem;
+      margin: 2rem 0;
+      background-color: rgba(230, 46, 56, 0.05);
+      border-radius: 0 10px 10px 0;
+      font-style: italic;
+      color: var(--text-gray);
+    }
+    .article-body pre {
+      background-color: #2d2d2d;
+      color: #f8f8f2;
+      padding: 1.5rem;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin: 1.5rem 0;
+      font-family: 'Courier New', monospace;
+    }
+    .article-body code {
+      background-color: rgba(230, 46, 56, 0.1);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: 'Courier New', monospace;
+      color: var(--primary);
+    }
+    .article-body pre code {
+      background-color: transparent;
+      padding: 0;
+      color: inherit;
+    }
+    .code-example {
+      background-color: rgba(230, 46, 56, 0.05);
+      padding: 1.5rem;
+      border-radius: 8px;
+      margin: 1.5rem 0;
+      border-left: 4px solid var(--primary);
+    }
+    .comparison-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 2rem 0;
+      box-shadow: var(--shadow);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .comparison-table th {
+      background-color: var(--primary);
+      color: #fff;
+      padding: 1rem;
+      text-align: left;
+    }
+    .comparison-table td {
+      padding: 1rem;
+      border-bottom: 1px solid var(--border-light);
+      color: var(--text-gray);
+    }
+    .comparison-table tr:nth-child(even) {
+      background-color: rgba(230, 46, 56, 0.05);
+    }
+    .tip-box {
+      background-color: rgba(255, 193, 7, 0.1);
+      border-left: 4px solid #ffc107;
+      padding: 1.5rem;
+      margin: 2rem 0;
+      border-radius: 0 8px 8px 0;
+    }
+    .tip-box h3 {
+      color: #d39e00;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-top: 0;
+    }
+    .article-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.8rem;
+      margin: 3rem 0;
+      padding-top: 2rem;
+      border-top: 1px solid var(--border-light);
+    }
+    .article-tags .tag {
+      padding: 8px 16px;
+    }
+    .share-buttons {
+      text-align: center;
+      margin: 3rem 0;
+      padding: 2rem;
+      background-color: rgba(230, 46, 56, 0.05);
+      border-radius: 10px;
+    }
+    .share-links {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+    .share-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 10px 20px;
+      background-color: #fff;
+      border-radius: 30px;
+      box-shadow: var(--shadow);
+      font-weight: 600;
+    }
+    .share-btn:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-hover);
+    }
+    .share-btn.weibo { color: #e6162d; }
+    .share-btn.wechat { color: #07c160; }
+    .share-btn.twitter { color: #1da1f2; }
+    .share-btn.linkedin { color: #0077b5; }
+    .comments-section {
+      margin-top: 4rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--border-light);
+    }
+    .comment-form {
+      background-color: var(--bg-light);
+      padding: 2rem;
+      border-radius: 8px;
+      margin-bottom: 3rem;
+    }
+    .form-row {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+    .form-group {
+      margin-bottom: 1rem;
+      width: 100%;
+    }
+    .form-group.half {
+      flex: 1;
+    }
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+    }
+    .form-control {
+      width: 100%;
+      padding: 0.8rem;
+      border: 1px solid var(--border-light);
+      border-radius: 4px;
+      font-size: 14px;
+    }
+    .form-control:focus {
+      outline: none;
+      border-color: var(--primary);
+    }
+    textarea.form-control {
+      resize: vertical;
+      min-height: 100px;
+    }
+    .comment-list {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+    .comment-item {
+      background-color: #fff;
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+    }
+    .comment-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+    .comment-author {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .comment-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+    .comment-badge {
+      display: inline-block;
+      padding: 2px 8px;
+      background-color: rgba(230, 46, 56, 0.1);
+      color: var(--primary);
+      border-radius: 10px;
+      font-size: 0.8rem;
+      margin-left: 5px;
+    }
+    .comment-date {
+      color: var(--text-light);
+      font-size: 0.9rem;
+    }
+    .comment-body {
+      margin-bottom: 1rem;
+      color: var(--text-gray);
+    }
+    .comment-reply {
+      color: var(--primary);
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+    .comment-reply:hover {
+      text-decoration: underline;
+    }
+    .article-navigation {
+      display: flex;
+      justify-content: space-between;
+      margin: 3rem 0;
+      gap: 1rem;
+    }
+    .nav-link {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.8rem 1.5rem;
+      background-color: #fff;
+      border-radius: 4px;
+      box-shadow: var(--shadow);
+      color: var(--text-gray);
+    }
+    .nav-link:hover {
+      color: var(--primary);
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-hover);
+    }
+    .nav-link.prev {
+      flex-direction: row-reverse;
+    }
+
+    /* 作品集页面样式 */
+    .portfolio-header {
+      padding: 60px 0;
+      text-align: center;
+      background: #f9f9f9;
+      margin-bottom: 40px;
+    }
+    .portfolio-header .section-title {
+      display: inline-block;
+      margin-bottom: 20px;
+    }
+    .portfolio-filter {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 40px;
+      justify-content: center;
+    }
+    .portfolio-filter-btn {
+      padding: 8px 18px;
+      border: 1px solid var(--border-light);
+      border-radius: 20px;
+      background: #fff;
+      color: var(--text-gray);
+      cursor: pointer;
+      transition: var(--transition);
+      font-size: 14px;
+    }
+    .portfolio-filter-btn.active,
+    .portfolio-filter-btn:hover {
+      background: var(--primary);
+      color: #fff;
+      border-color: var(--primary);
+      box-shadow: var(--shadow);
+    }
+    .portfolio-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 30px;
+      margin-bottom: 60px;
+    }
+    .portfolio-item {
+      background: #fff;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      transition: var(--transition);
+      display: block;
+    }
+    .portfolio-item:hover {
+      transform: translateY(-10px);
+      box-shadow: var(--shadow-hover);
+    }
+    .portfolio-image {
+      position: relative;
+      height: 220px;
+      overflow: hidden;
+    }
+    .portfolio-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: var(--transition);
+    }
+    .portfolio-item:hover .portfolio-image img {
+      transform: scale(1.05);
+    }
+    .portfolio-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(230, 46, 56, 0.8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: var(--transition);
+    }
+    .portfolio-item:hover .portfolio-overlay {
+      opacity: 1;
+    }
+    .portfolio-info {
+      padding: 20px;
+    }
+    .portfolio-info h3 {
+      font-size: 18px;
+      color: var(--text-dark);
+      margin-bottom: 10px;
+    }
+    .portfolio-info p {
+      color: var(--text-gray);
+      font-size: 14px;
+      line-height: 1.6;
+      margin-bottom: 15px;
+    }
+    .portfolio-tags {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+    .portfolio-tag {
+      padding: 4px 12px;
+      background: #f0f0f0;
+      border-radius: 12px;
+      font-size: 12px;
+      color: var(--text-gray);
+    }
+    .portfolio-links {
+      display: flex;
+      gap: 10px;
+    }
+    .portfolio-links .btn {
+      flex: 1;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+    }
+    .portfolio-stats {
+      margin: 60px 0;
+      padding: 40px 0;
+      background: linear-gradient(135deg, rgba(230, 46, 56, 0.05), rgba(67, 97, 238, 0.05));
+      border-radius: 15px;
+    }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 25px;
+      text-align: center;
+    }
+    .stat-item {
+      padding: 20px;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: var(--shadow);
+      transition: var(--transition);
+    }
+    .stat-item:hover {
+      transform: translateY(-8px);
+      box-shadow: var(--shadow-hover);
+    }
+    .stat-number {
+      font-size: 36px;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 8px;
+    }
+    .stat-label {
+      font-size: 14px;
+      color: var(--text-gray);
+      font-weight: 500;
+    }
+    .process-section {
+      margin: 80px 0;
+    }
+    .process-steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 25px;
+      margin-top: 40px;
+    }
+    .process-step {
+      text-align: center;
+      padding: 25px;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: var(--shadow);
+      transition: var(--transition);
+      position: relative;
+    }
+    .process-step:hover {
+      transform: translateY(-10px);
+      box-shadow: var(--shadow-hover);
+    }
+    .process-step::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      right: -12px;
+      width: 24px;
+      height: 2px;
+      background: var(--border-light);
+      z-index: -1;
+    }
+    .process-step:last-child::before {
+      display: none;
+    }
+    .step-icon {
+      width: 60px;
+      height: 60px;
+      background: linear-gradient(135deg, var(--primary), #ff6b73);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 15px;
+      color: #fff;
+      font-size: 22px;
+      box-shadow: var(--shadow);
+    }
+    .process-step h3 {
+      font-size: 16px;
+      color: var(--text-dark);
+      margin-bottom: 10px;
+    }
+    .process-step p {
+      font-size: 13px;
+      color: var(--text-gray);
+      line-height: 1.5;
+    }
+    .tech-stack-section {
+      margin: 80px 0;
+    }
+    .tech-categories {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 25px;
+      margin-top: 40px;
+    }
+    .tech-category {
+      background: #fff;
+      padding: 25px;
+      border-radius: 10px;
+      box-shadow: var(--shadow);
+    }
+    .tech-category h3 {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 16px;
+      color: var(--primary);
+      margin-bottom: 20px;
+    }
+    .tech-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .tech-tag {
+      padding: 6px 14px;
+      background: rgba(230, 46, 56, 0.1);
+      color: var(--primary);
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 600;
+      transition: var(--transition);
+    }
+    .tech-tag:hover {
+      background: var(--primary);
+      color: #fff;
+      transform: translateY(-3px);
+    }
+    .collaboration-section {
+      margin: 80px 0;
+      padding: 50px;
+      background: linear-gradient(135deg, var(--primary), #d11a24);
+      border-radius: 15px;
+      text-align: center;
+      color: #fff;
+    }
+    .collaboration-content h2 {
+      font-size: 28px;
+      margin-bottom: 15px;
+    }
+    .collaboration-content p {
+      font-size: 16px;
+      margin-bottom: 30px;
+      opacity: 0.9;
+      max-width: 700px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .collaboration-content .btn {
+      background: #fff;
+      color: var(--primary);
+      font-size: 16px;
+      padding: 10px 25px;
+    }
+    .collaboration-content .btn:hover {
+      background: #f5f5f5;
+      transform: translateY(-3px);
+    }
+
+    /* 页脚样式 - 统一页脚信息 */
+    footer {
+      background-color: #333;
+      color: #fff;
+      padding: 60px 0 30px;
+      margin-top: 40px;
+    }
+    .footer-content {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 30px;
+      margin-bottom: 30px;
+    }
+    .footer-about .footer-logo {
+      font-size: 20px;
+      font-weight: bold;
+      color: #fff;
+      margin-bottom: 15px;
+      display: inline-block;
+    }
+    .footer-about p {
+      color: #ccc;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+    .footer-social {
+      display: flex;
+      gap: 15px;
+      margin-top: 15px;
+    }
+    .footer-social a {
+      font-size: 18px;
+      color: #ccc;
+    }
+    .footer-social a:hover {
+      color: var(--primary);
+    }
+    .footer-links h4, .footer-newsletter h4 {
+      font-size: 16px;
+      margin-bottom: 15px;
+    }
+    .footer-links ul {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .footer-links a {
+      color: #ccc;
+      font-size: 14px;
+    }
+    .footer-links a:hover {
+      color: var(--primary);
+      transform: translateX(5px);
+    }
+    .footer-newsletter p {
+      color: #ccc;
+      font-size: 14px;
+      margin-bottom: 15px;
+    }
+    .footer-newsletter .form-control {
+      background-color: #444;
+      border: none;
+      color: #fff;
+      margin-bottom: 10px;
+    }
+    .footer-bottom {
+      padding-top: 30px;
+      border-top: 1px solid #444;
+      text-align: center;
+      font-size: 12px;
+      color: #ccc;
+    }
+
+    /* 响应式适配 - 统一移动端样式 */
+    @media (max-width: 768px) {
+      .desktop-nav {
+        display: none;
+      }
+      .mobile-menu-btn {
+        display: block;
+      }
+      .articles-page, .about-page, .article-detail-page {
+        flex-direction: column;
+      }
+      .article-item, .info-card {
+        flex-direction: column;
+        text-align: center;
+      }
+      .article-item-img {
+        width: 100%;
+        height: 160px;
+      }
+      .article-item-content {
+        padding: 15px;
+      }
+      .info-list {
+        grid-template-columns: 1fr;
+      }
+      .form-row {
+        flex-direction: column;
+        gap: 0;
+      }
+      .share-links {
+        flex-direction: column;
+        align-items: center;
+      }
+      .share-btn {
+        width: 200px;
+        justify-content: center;
+      }
+      .article-navigation {
+        flex-direction: column;
+      }
+      .article-meta {
+        flex-wrap: wrap;
+        gap: 1rem;
+      }
+      .footer-about, .footer-links, .footer-newsletter {
+        text-align: center;
+      }
+      .footer-social {
+        justify-content: center;
+      }
+      .process-step::before {
+        display: none;
+      }
+      .collaboration-section {
+        padding: 30px 20px;
+      }
+      .collaboration-content h2 {
+        font-size: 24px;
+      }
+      .portfolio-image {
+        height: 180px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- 头部导航 - 包含所有页面链接 -->
+  <header>
+    <div class="container nav-wrap">
+      <div class="logo">博客</div>
+      <nav class="desktop-nav">
+        <ul>
+          <li><a onclick="switchPage('home')" class="active">首页</a></li>
+          <li><a onclick="switchPage('articles')">文章列表</a></li>
+          <li><a onclick="switchPage('portfolio')">作品集</a></li>
+          <li><a onclick="switchPage('about')">关于我</a></li>
+          <li><a onclick="switchPage('arknights-guide')">文章示例</a></li>
+        </ul>
+      </nav>
+      <div class="mobile-menu-btn" onclick="toggleMobileMenu()">
+        <i class="fas fa-bars"></i>
+      </div>
+    </div>
+    <!-- 移动端导航 -->
+    <div class="container mobile-nav" id="mobileNav">
+      <ul>
+        <li><a onclick="switchPage('home')" class="active">首页</a></li>
+        <li><a onclick="switchPage('articles')">文章列表</a></li>
+        <li><a onclick="switchPage('portfolio')">作品集</a></li>
+        <li><a onclick="switchPage('about')">关于我</a></li>
+        <li><a onclick="switchPage('arknights-guide')">文章示例</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <!-- 1. 首页 -->
+  <div class="page-content active" id="home">
+    <section class="profile-section">
+      <div class="container">
+        <img src="https://ts1.tc.mm.bing.net/th/id/OIP-C.JBBuDWvcFecs-PDnlnLS3QAAAA?rs=1&pid=ImgDetMain&o=7&rm=3" alt="头像" class="profile-avatar">
+        <h2 class="profile-name">李浩霖</h2>
+        <p class="profile-motto">你所热爱的就是你的生活</p>
+        <div class="profile-social">
+          <a href="#"><i class="fab fa-weibo"></i></a>
+          <a href="#"><i class="fab fa-weixin"></i></a>
+          <a href="#"><i class="fab fa-qq"></i></a>
+          <a href="#"><i class="fab fa-github"></i></a>
+        </div>
+      </div>
+    </section>
+    <section class="home-articles">
+      <div class="container">
+        <h2 class="section-title">精选文章</h2>
+        <div class="article-cards">
+          <div class="article-card">
+            <img src="https://gd-hbimg.huaban.com/2da9435368738dce04a71a285dfb827e140cbd5c12cc1-sRDDv1_fw658" alt="英雄联盟封面">
+            <h3>英雄联盟：2026赛季全位置强势英雄推荐</h3>
+            <p>新版本改动解析，上中下野辅五大位置核心英雄出装、符文搭配，轻松上钻石！</p>
+            <div class="article-meta">
+              <span>2026-01-03</span>
+              <a onclick="switchPage('articles')" class="btn">阅读更多</a>
+            </div>
+          </div>
+          <div class="article-card">
+            <img src="https://gd-hbimg.huaban.com/a290486f50f9029e5e201f94b5a186f1da2bd2562773-STXtGd_fw658" alt="明日方舟封面">
+            <h3>明日方舟深度攻略：从萌新到大佬的全维度养成指南</h3>
+            <p>干员培养、阵容搭配、资源规划、危机合约通关技巧，一文全掌握！</p>
+            <div class="article-meta">
+              <span>2026-01-10</span>
+              <a onclick="switchPage('arknights-guide')" class="btn">阅读更多</a>
+            </div>
+          </div>
+          <div class="article-card">
+            <img src="https://ts2.tc.mm.bing.net/th/id/OIP-C.IpndqfEI-Ni4XcpKHq7MzgHaFN?rs=1&pid=ImgDetMain&o=7&rm=3" alt="碧蓝档案封面">
+            <h3>碧蓝档案：主线12章通关攻略及角色培养优先级</h3>
+            <p>学生阵容搭配、装备选择、BOSS机制解析，轻松解锁隐藏剧情！</p>
+            <div class="article-meta">
+              <span>2026-01-05</span>
+              <a onclick="switchPage('articles')" class="btn">阅读更多</a>
+            </div>
+          </div>
+          <div class="article-card">
+            <img src="https://ts1.tc.mm.bing.net/th/id/R-C.7246efde762401c13877d79606f90a7e?rik=kpkPO50SxD56XA&riu=http%3a%2f%2fpic.962.net%2fup%2f2023-8%2f20238251128561014.png&ehk=3S%2b%2fpsBUii10zVXOIW%2bXW1jepa5HrtNBXcPGr7wNEKk%3d&risl=&pid=ImgRaw&r=0" alt="三角洲行动封面">
+            <h3>三角洲行动：PC端最优设置及战术打法指南</h3>
+            <p>灵敏度调节、枪械配件选择、地图点位分析，成为战术大师！</p>
+            <div class="article-meta">
+              <span>2026-01-06</span>
+              <a onclick="switchPage('articles')" class="btn">阅读更多</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="tags-section">
+      <div class="container">
+        <h2 class="section-title">我的兴趣</h2>
+        <div class="tags-cloud">
+          <span class="tag">游戏攻略</span>
+          <span class="tag">前端开发</span>
+          <span class="tag">ACG</span>
+          <span class="tag">美食制作</span>
+          <span class="tag">响应式设计</span>
+          <span class="tag">JavaScript</span>
+          <span class="tag">HTML/CSS</span>
+          <span class="tag">策略手游</span>
+          <span class="tag">射击游戏</span>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- 2. 文章列表页 -->
+  <div class="page-content" id="articles">
+    <div class="container articles-page">
+      <div class="articles-main">
+        <div class="page-header">
+          <h2>所有文章</h2>
+          <p>思想的轨迹 · 生活的记录 · 游戏的感悟</p>
+        </div>
+        <div class="filter-bar">
+          <div class="filter-btn active">全部分类</div>
+          <div class="filter-btn">游戏攻略</div>
+          <div class="filter-btn">前端技术</div>
+          <div class="filter-btn">生活分享</div>
+          <div class="filter-btn">动漫杂谈</div>
+        </div>
+        <div class="article-list">
+          <div class="article-item">
+            <img src="https://ts1.tc.mm.bing.net/th/id/R-C.7246efde762401c13877d79606f90a7e?rik=kpkPO50SxD56XA&riu=http%3a%2f%2fpic.962.net%2fup%2f2023-8%2f20238251128561014.png&ehk=3S%2b%2fpsBUii10zVXOIW%2bXW1jepa5HrtNBXcPGr7wNEKk%3d&risl=&pid=ImgRaw&r=0" alt="三角洲行动封面" class="article-item-img">
+            <div class="article-item-content">
+              <h3 class="article-item-title">三角洲行动：PC端最优设置及战术打法指南</h3>
+              <p class="article-item-excerpt">《三角洲行动》作为新一代战术射击游戏，PC端的设置优化直接影响战斗体验。本文详细讲解灵敏度调节、枪械配件选择、地图点位分析，帮助玩家快速适应PC端操作，成为战术大师！</p>
+              <div class="article-item-meta">
+                <span>2026-01-05</span>
+                <span>分类：游戏攻略</span>
+                <span>阅读：150</span>
+                <a onclick="switchPage('articles')" class="btn">点击阅读</a>
+              </div>
+            </div>
+          </div>
+          <div class="article-item">
+            <img src="https://gd-hbimg.huaban.com/a290486f50f9029e5e201f94b5a186f1da2bd2562773-STXtGd_fw658" alt="明日方舟封面" class="article-item-img">
+            <div class="article-item-content">
+              <h3 class="article-item-title">明日方舟深度攻略：从萌新到大佬的全维度养成指南</h3>
+              <p class="article-item-excerpt">策略手游的终极玩法解析，干员培养、阵容搭配、资源规划、危机合约通关技巧完全手册，帮助新老玩家快速提升游戏实力，轻松通关各类高难度关卡！</p>
+              <div class="article-item-meta">
+                <span>2026-01-10</span>
+                <span>分类：游戏攻略</span>
+                <span>阅读：286</span>
+                <a onclick="switchPage('arknights-guide')" class="btn">点击阅读</a>
+              </div>
+            </div>
+          </div>
+          <div class="article-item">
+            <img src="https://gd-hbimg.huaban.com/2da9435368738dce04a71a285dfb827e140cbd5c12cc1-sRDDv1_fw658webp" alt="英雄联盟封面" class="article-item-img">
+            <div class="article-item-content">
+              <h3 class="article-item-title">英雄联盟：2026赛季全位置强势英雄推荐</h3>
+              <p class="article-item-excerpt">2026赛季版本改动解析，上中下野辅五大位置核心英雄出装、符文搭配、对线技巧，从青铜到钻石的进阶之路，一文带你轻松上分！</p>
+              <div class="article-item-meta">
+                <span>2026-01-03</span>
+                <span>分类：游戏攻略</span>
+                <span>阅读：139</span>
+                <a onclick="switchPage('articles')" class="btn">点击阅读</a>
+              </div>
+            </div>
+          </div>
+          <div class="article-item">
+            <img src="https://ts2.tc.mm.bing.net/th/id/OIP-C.IpndqfEI-Ni4XcpKHq7MzgHaFN?rs=1&pid=ImgDetMain&o=7&rm=3" alt="碧蓝档案封面" class="article-item-img">
+            <div class="article-item-content">
+              <h3 class="article-item-title">碧蓝档案：主线12章通关攻略及角色培养优先级</h3>
+              <p class="article-item-excerpt">碧蓝档案主线12章剧情解析，BOSS机制详解，学生阵容搭配、装备选择、等级规划，帮助玩家轻松解锁隐藏剧情，获取限定奖励！</p>
+              <div class="article-item-meta">
+                <span>2026-01-05</span>
+                <span>分类：游戏攻略</span>
+                <span>阅读：112</span>
+                <a onclick="switchPage('articles')" class="btn">点击阅读</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="pagination">
+          <div class="pagination-btn"><i class="fas fa-chevron-left"></i></div>
+          <div class="pagination-btn active">1</div>
+          <div class="pagination-btn">2</div>
+          <div class="pagination-btn">3</div>
+          <div class="pagination-btn"><i class="fas fa-chevron-right"></i></div>
+        </div>
+      </div>
+      <div class="sidebar">
+        <div class="sidebar-widget">
+          <h3>热门文章</h3>
+          <ul class="hot-articles">
+            <li><a onclick="switchPage('arknights-guide')">明日方舟深度攻略：从萌新到大佬的全维度养成指南</a></li>
+            <li><a onclick="switchPage('articles')">三角洲行动：PC端最优设置及战术打法指南</a></li>
+            <li><a onclick="switchPage('articles')">英雄联盟：2026赛季全位置强势英雄推荐</a></li>
+            <li><a onclick="switchPage('articles')">碧蓝档案：主线12章通关攻略及角色培养优先级</a></li>
+            <li><a onclick="switchPage('articles')">前端开发：CSS Grid布局实战教程</a></li>
+          </ul>
+        </div>
+        <div class="sidebar-widget">
+          <h3>分类统计</h3>
+          <ul class="category-stats">
+            <li><span>游戏攻略</span><span>12篇</span></li>
+            <li><span>前端技术</span><span>6篇</span></li>
+            <li><span>动漫杂谈</span><span>5篇</span></li>
+            <li><span>生活分享</span><span>4篇</span></li>
+            <li><span>美食制作</span><span>3篇</span></li>
+          </ul>
+        </div>
+        <div class="sidebar-widget">
+          <h3>近期标签</h3>
+          <div class="tags-cloud">
+            <span class="tag">明日方舟</span>
+            <span class="tag">英雄联盟</span>
+            <span class="tag">三角洲行动</span>
+            <span class="tag">CSS Grid</span>
+            <span class="tag">碧蓝档案</span>
+            <span class="tag">前端布局</span>
+            <span class="tag">游戏攻略</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. 关于我页面 -->
+  <div class="page-content" id="about">
+    <div class="container about-page">
+      <section class="about-main">
+        <h2 class="about-title">关于我</h2>
+        <div class="info-card">
+          <img src="https://ts1.tc.mm.bing.net/th/id/OIP-C.JBBuDWvcFecs-PDnlnLS3QAAAA?rs=1&pid=ImgDetMain&o=7&rm=3" alt="个人头像" class="avatar">
+          <div class="info-detail">
+            <h3>李浩霖</h3>
+            <p class="signature">你所热爱的就是你的生活</p>
+            <ul class="info-list">
+              <li><span><i class="fas fa-user"></i> 昵称：</span><span>Doctor</span></li>
+              <li><span><i class="fas fa-calendar"></i> 生日：</span><span>2006-10-19</span></li>
+              <li><span><i class="fas fa-map-marker-alt"></i> 城市：</span><span>重庆</span></li>
+              <li><span><i class="fas fa-envelope"></i> 邮箱：</span><span>3132864392@qq.com</span></li>
+              <li><span><i class="fas fa-gamepad"></i> 爱好：</span><span>美食、ACG、编程</span></li>
+              <li><span><i class="fas fa-link"></i> 博客：</span><span>lDoctorl.github.io</span></li>
+            </ul>
+          </div>
+        </div>
+        <div class="intro">
+          <h4>个人简介</h4>
+          <p>大家好，我是李浩霖，一名资深游戏爱好者和前端开发学习者。从2018年开始接触游戏行业，热衷于体验各类端游、手游，尤其偏爱策略类、射击类游戏，至今已深度体验上百款游戏，积累了丰富的游戏攻略撰写经验。</p>
+          <p>同时，我也是一名前端开发学习者，专注于HTML/CSS、JavaScript、响应式设计等技术，擅长将游戏体验与技术学习结合，通过博客分享游戏攻略、技术心得和生活感悟。</p>
+          <p>我始终相信“你所热爱的就是你的生活”，无论是沉浸在游戏的虚拟世界中，还是敲写代码构建网页，都是对生活的热爱与探索。欢迎各位小伙伴在博客留言交流，一起探讨游戏和技术！</p>
+        </div>
+        <div class="skills">
+          <h4>技能与擅长</h4>
+          <div class="skill-tags">
+            <span class="skill-tag">HTML/CSS</span>
+            <span class="skill-tag">JavaScript</span>
+            <span class="skill-tag">响应式设计</span>
+            <span class="skill-tag">游戏测评</span>
+            <span class="skill-tag">文案撰写</span>
+            <span class="skill-tag">美食制作</span>
+            <span class="skill-tag">前端布局</span>
+            <span class="skill-tag">攻略创作</span>
+          </div>
+        </div>
+        <div class="stats">
+          <div class="stat-item">
+            <div class="stat-num">25</div>
+            <div class="stat-text">发布文章</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-num">5k+</div>
+            <div class="stat-text">总阅读量</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-num">128</div>
+            <div class="stat-text">粉丝数</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-num">64</div>
+            <div class="stat-text">评论数</div>
+          </div>
+        </div>
+      </section>
+      <aside class="sidebar">
+        <div class="sidebar-widget">
+          <h3>热门文章</h3>
+          <ul class="hot-articles">
+            <li><a onclick="switchPage('arknights-guide')">明日方舟深度攻略：从萌新到大佬的全维度养成指南</a></li>
+            <li><a onclick="switchPage('articles')">三角洲行动：PC端最优设置及战术打法指南</a></li>
+            <li><a onclick="switchPage('articles')">英雄联盟：2026赛季全位置强势英雄推荐</a></li>
+          </ul>
+        </div>
+        <div class="sidebar-widget">
+          <h3>分类统计</h3>
+          <ul class="category-stats">
+            <li><span>游戏攻略</span><span>12篇</span></li>
+            <li><span>前端技术</span><span>6篇</span></li>
+            <li><span>动漫杂谈</span><span>5篇</span></li>
+            <li><span>生活分享</span><span>4篇</span></li>
+          </ul>
+        </div>
+        <div class="sidebar-widget">
+          <h3>联系方式</h3>
+          <div class="profile-social" style="justify-content: flex-start; margin-top: 10px;">
+            <a href="#"><i class="fab fa-weibo" style="margin-right: 15px;"></i> 微博</a>
+            <a href="#"><i class="fab fa-weixin" style="margin-right: 15px;"></i> 微信</a>
+            <a href="#"><i class="fab fa-qq" style="margin-right: 15px;"></i> QQ</a>
+            <a href="#"><i class="fab fa-github" style="margin-right: 15px;"></i> GitHub</a>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <!-- 4. 明日方舟攻略详情页 -->
+  <div class="page-content" id="arknights-guide">
+    <div class="container article-detail-page">
+      <div class="article-content-wrap">
+        <section class="article-header">
+          <div class="article-meta">
+            <span class="post-date"><i class="far fa-calendar"></i> 2026年01月10日</span>
+            <span class="post-category"><i class="far fa-folder"></i> 游戏攻略</span>
+            <span class="read-time"><i class="far fa-clock"></i> 阅读时间: 10分钟</span>
+            <span class="comment-count"><i class="far fa-comment"></i> 28条评论</span>
+          </div>
+          <h1 class="section-title">明日方舟深度攻略：从萌新到大佬的全维度养成指南</h1>
+          <p class="article-subtitle">策略手游的终极玩法解析，干员培养、阵容搭配与资源规划完全手册</p>
+        </section>
+        <article class="article-content">
+          <div class="article-body">
+            <div class="featured-image">
+              <img src="https://gd-hbimg.huaban.com/a290486f50f9029e5e201f94b5a186f1da2bd2562773-STXtGd_fw658" alt="明日方舟游戏截图">
+              <p class="image-caption">明日方舟游戏截图 - 策略与养成的完美结合</p>
+            </div>
+            
+            <p>《明日方舟》作为鹰角网络开发的策略塔防手游，自2019年上线以来，凭借独特的世界观设定、深度策略玩法和丰富的干员养成系统，吸引了数千万玩家。这款游戏以"矿石病"为核心背景，玩家将作为罗德岛博士，带领干员对抗天灾、拯救世界。本文将从游戏核心机制出发，全面解析干员培养、阵容搭配、资源规划等关键玩法，帮助新老玩家快速提升游戏实力。</p>
+            
+            <h2>一、游戏核心机制解析</h2>
+            <p>明日方舟的核心玩法是"策略塔防+角色养成"，玩家需要在有限的部署位上，合理安排干员位置，利用干员特性配合地形优势，抵御敌人进攻。与传统塔防游戏相比，其核心特色体现在三个维度：</p>
+            
+            <ul>
+                <li><strong>干员职业分化</strong>：10大职业、20+分支，每个干员都有独特的技能与定位，不存在"万能干员"，需根据关卡特性灵活搭配</li>
+                <li><strong>地形互动机制</strong>：高低差（远程干员可攻击低处敌人，低处无法攻击高处）、水域（部分干员无法部署）、障碍物（阻挡敌人路径）等地形元素直接影响战斗效果</li>
+                <li><strong>技能释放策略</strong>：主动技能需消耗技力，释放时机与顺序直接决定战局胜负，高难度关卡需精准把控技能循环</li>
+            </ul>
+            
+            <h3>1. 干员职业体系</h3>
+            <p>明日方舟的干员职业体系是游戏策略性的核心，不同职业各司其职，形成完整的战斗闭环：</p>
+            
+            <pre><code>// 核心职业定位表（含分支特性）
+先锋：费用回复 + 前期抗压
+  - 挡2回费型（如：德克萨斯、推进之王）：兼顾输出与续航，前期稳场
+  - 挡1高速回费型（如：桃金娘、极境）：快速回复费用，后期可撤退
+近卫：主力输出 + 地面缠斗
+  - 重装近卫（如：星极、布洛卡）：高防御高输出，可承伤可输出
+  - 术战近卫（如：史尔特尔、艾丽妮）：法术伤害，克制高甲敌人
+  - 快攻近卫（如：玫兰莎、刻刀）：低费高攻，快速处理单体敌人
+狙击：远程物理输出 + 空中单位克制
+  - 速射狙击（如：能天使、空弦）：高攻速，对低甲单位压制力极强
+  - 重狙狙击（如：W、菲亚梅塔）：群体伤害+控制，清场能力强
+  - 霰弹狙击（如：空爆、陨星）：范围伤害，应对集群敌人
+医疗：治疗续航 + 状态免疫
+  - 单体医疗（如：闪灵、华法林）：单体高额治疗，部分带buff效果
+    - 群体医疗（如：夜莺、白面鸮）：群体治疗+特殊加成（法抗/技力回复）
+  - 治疗守卫（如：塞雷娅、赫默）：兼顾治疗与承伤/召唤
+术师：远程法术输出 + 群体伤害
+  - 单体术师（如：阿米娅、艾雅法拉）：高额单体法术伤害
+  - 群体术师（如：伊内丝、远山）：范围法术伤害，克制高甲敌人
+  - 召唤术师（如：梅尔、稀音）：召唤单位辅助战斗
+重装：承伤抗打 + 控制拦截
+  - 常规重装（如：星熊、年）：高防御高血量，主承伤
+  - 控制重装（如：雷蛇、石棉）：带控制/特殊效果，辅助控场
+  - 治疗重装（如：塞雷娅）：兼顾承伤与治疗，泛用性极强
+辅助：减速增伤 + 特殊功能
+  - 减速辅助（如：安洁莉娜、铃兰）：减速+增伤，提升输出效率
+  - 削弱辅助（如：巫恋、格劳克斯）：降低敌人属性，辅助破甲
+  - 召唤辅助（如：麦哲伦、稀音）：召唤单位提供视野/输出
+特种：位移控制 + 地形利用
+  - 推拉特种（如：温蒂、阿消）：改变敌人位置，配合地形秒杀
+  - 快速部署特种（如：红、傀影）：快速切后排/临时承伤
+  - 陷阱特种（如：狮蝎、伊桑）：隐藏部署，持续输出+控制
+</code></pre>
+            
+            <h3>2. 关卡机制与难度梯度</h3>
+            <p>游戏关卡分为主线剧情、资源副本、活动关卡、危机合约四大类，难度梯度清晰，不同阶段有不同核心目标：</p>
+            <ol>
+                <li><strong>主线剧情</strong>：解锁基础功能（基建、商店、招募），提供核心养成材料（龙门币、作战记录、精英材料），难度循序渐进，适合新手熟悉游戏机制</li>
+                <li><strong>资源副本</strong>：分为经验本（AP）、钱本（CE）、芯片本（PR）、材料本（CA）四大类，每日限定开放（部分周末全开放），是日常资源获取的核心途径</li>
+                <li><strong>活动关卡</strong>：限时开放（通常2-3个月一次大型活动），提供稀有干员（限定/非限定）、皮肤、高级养成材料，难度分为普通/困难/突袭，奖励丰厚</li>
+                <li><strong>危机合约</strong>：高难度挑战模式（每月一次），通过添加"危机词条"（提升敌人属性/限制干员部署）提升难度，奖励限定头像框、高级材料、家具，是硬核玩家的核心挑战内容</li>
+            </ol>
+            
+            <h2>二、干员培养全攻略</h2>
+            <p>干员培养是明日方舟的核心养成系统，资源有限的情况下，合理分配资源、优先培养关键干员，能让你的游戏进程事半功倍。以下是经过实战验证的培养指南，分为新手期（0-60级）、过渡期（60-80级）、毕业期（80级+）三个阶段：</p>
+            
+            <div class="code-example">
+                <h3>一、新手期必练干员清单（0-60级，覆盖90%关卡）</h3>
+                <p>优先培养这些干员，无需高练度即可轻松推进主线和日常副本：</p>
+                
+                <pre><code>// 先锋（费用回复核心，必练2个）
+1. 芬（新手赠送，1-2潜即可）：挡2回费，易获取易培养，前期稳场
+2. 桃金娘（基建兑换/招募）：挡1高速回费，精一即可用，后期也常用
+3. 德克萨斯（招募/寻访）：精二后强度质变，沉默功能+大范围攻击，优先级高
+// 近卫（地面输出核心，必练1-2个）
+1. 玫兰莎（新手赠送，2-3潜）："玫剑圣"，低练度高输出，过渡神器，能单挑精英怪
+2. 银灰（寻访限定）：精二后真银斩范围清场，跨等级作战能力强，优先级最高
+3. 史尔特尔（寻访限定）：黄昏技能爆发极高，单挑BOSS必备，精二优先级拉满
+// 狙击（远程物理输出，必练1-2个）
+1. 克洛斯（新手赠送）：前期过渡，对空输出，易培养
+2. 能天使（寻访限定）：速射天花板，对低甲单位压制力极强，精二后质变
+3. 蓝毒（招募/寻访）：群体伤害，对空对地兼顾，泛用性强
+// 医疗（续航保障，必练1-2个）
+1. 芙蓉（新手赠送）：前期过渡，单体治疗
+2. 闪灵（寻访）：单体治疗天花板，护甲加成实用，提升团队生存
+3. 夜莺（寻访）：群体治疗+法术抗性，应对法师波次/高难度关卡
+// 重装（承伤核心，必练1个）
+1. 米格鲁（新手赠送）：前期过渡，挡3承伤
+2. 星熊（寻访）：高防御高闪避，泛用性极强，几乎适用于所有关卡
+3. 年（限定寻访）：群体承伤+buff加成，危机合约必备
+// 术师（法术输出，必练1个）
+1. 阿米娅（主角必练）：精二后解锁群体法术，剧情强制升级，无需纠结
+2. 艾雅法拉（寻访）：单体+群体法术输出，强度天花板，精二优先级高
+// 辅助/特种（功能补充，选练1个）
+1. 安洁莉娜（寻访）：减速+增伤，提升团队输出，泛用性强
+2. 红（招募/寻访）：快速部署切后排，应对突发情况
+3. 阿消（新手赠送）：推拉特种，配合地形秒杀敌人，基建必备
+</code></pre>
+            </div>
+            
+            <div class="code-example">
+                <h3>二、过渡期培养规划（60-80级，冲击高难度）</h3>
+                <p>核心干员精二后，针对性培养功能型干员，完善阵容体系：</p>
+                
+                <pre><code>// 优先级排序（按需求程度）
+1. 塞雷娅（寻访）：精二解锁治疗+技力回复，兼顾承伤/治疗/buff，泛用性第一
+2. 铃兰（限定寻访）：精二后减速+增伤+治疗，辅助能力拉满，高难度必备
+3. 温蒂（寻访）：推拉+范围伤害，配合地形秒杀精英怪，危机合约核心
+4. 伊内丝（寻访）：群体法术+破甲，应对高甲集群敌人
+5. 巫恋（招募/寻访）：削弱敌人属性，大幅提升输出效率，低练度高收益
+6. 华法林（招募/寻访）：单体高额治疗+攻击buff，提升核心输出上限
+7. 傀影（招募/寻访）：快速部署+位移控制，辅助切后排/控场
+// 资源分配原则
+- 核心输出（银灰、能天使、艾雅法拉）：优先精二70级，关键技能专精三（银灰真银斩、能天使过载模式）
+- 辅助/功能型干员：精二50级即可，核心技能专精一/二（铃兰一技能、巫恋一技能）
+- 重装/医疗：精二50-70级，技能等级7-9级（星熊二技能、闪灵二技能）
+</code></pre>
+            </div>
+            
+            <div class="code-example">
+                <h3>三、毕业期培养方向（80级+，危机合约/活动突袭）</h3>
+                <p>完善阵容深度，针对性专精技能，冲击高难度关卡：</p>
+                
+                <pre><code>// 技能专精优先级（按泛用性）
+1. 银灰-真银斩（专精三）：范围清场，几乎所有高难度关卡必备
+2. 史尔特尔-黄昏（专精三）：长时间爆发，单挑BOSS/清场集群敌人
+3. 能天使-过载模式（专精三）：高攻速爆发，应对低甲集群
+4. 艾雅法拉-火山（专精三）：大范围法术伤害，克制高甲敌人
+5. 塞雷娅-药物配置（专精三）：群体治疗+技力回复，团队续航核心
+6. 铃兰-狐火渺然（专精三）：减速+增伤+治疗，辅助能力拉满
+7. 温蒂-液氮大炮（专精三）：大范围推拉+伤害，地形利用核心
+8. 巫恋-咒愈（专精二）：削弱敌人属性，低练度高收益
+9. 红-狼性（专精二）：快速部署切后排，控场+输出
+10. 安洁莉娜-秘杖·微粒模式（专精三）：减速+增伤，提升团队输出效率
+// 干员潜能提升优先级
+- 必升潜能：银灰（潜2减费、潜4加攻击）、能天使（潜2减费、潜5加攻速）、史尔特尔（潜2减费、潜4加攻击）
+- 可选潜能：塞雷娅（潜2减费）、铃兰（潜2减费）、温蒂（潜2减费）
+- 不建议升：低星干员（潜能提升收益低）、功能型干员（潜能对核心功能影响小）
+</code></pre>
+            </div>
+            
+            <h3>1. 培养优先级核心原则</h3>
+            <p>干员培养需遵循"先广度后深度"的原则，优先解锁关键技能与天赋，再逐步提升等级与潜能，避免资源浪费：</p>
+            
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>培养阶段</th>
+                        <th>核心目标</th>
+                        <th>资源分配重点</th>
+                        <th>推荐干员练度</th>
+                        <th>核心优先</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>前期（0-40级）</td>
+                        <td>解锁基础功能，推进主线剧情</td>
+                        <td>优先提升等级，技能等级5级即可</td>
+                        <td>低星干员精一1级，核心六星精一30级</td>
+                        <td>先锋 > 医疗 > 重装 > 狙击 > 近卫 > 术师</td>
+                    </tr>
+                    <tr>
+                        <td>中期（40-60级）</td>
+                        <td>通关资源副本，参与活动关卡</td>
+                        <td>核心六星精二1级，关键技能7级</td>
+                        <td>核心输出精二1级，辅助干员精一50级</td>
+                        <td>狙击 > 术师 > 近卫 > 重装 > 辅助 > 特种</td>
+                    </tr>
+                    <tr>
+                        <td>后期（60级+）</td>
+                        <td>冲击危机合约，挑战高难突袭</td>
+                        <td>核心干员精二50级，技能专精三</td>
+                        <td>输出干员精二70级，功能干员精二50级</td>
+                        <td>特种 > 辅助 > 近卫 > 术师 > 狙击 > 重装</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <div class="tip-box">
+                <h3><i class="fas fa-lightbulb"></i> 新手避坑指南</h3>
+                <p>1. 不要盲目追求高星干员，低星干员（如：玫兰莎、桃金娘、克洛丝）在前期性价比极高，完全能满足主线需求</p>
+                <p>2. 技能等级优先于等级提升，核心干员技能7级的提升远大于精二后等级提升</p>
+                <p>3. 资源副本优先刷取"经验本"和"钱本"，精英材料按需刷取，避免囤积过多无用材料</p>
+                <p>4. 基建是长期资源核心，前期优先升级贸易站和制造站，后期能节省大量刷图时间</p>
+            </div>
+            
+            <h2>三、阵容搭配与实战技巧</h2>
+            <p>明日方舟的阵容搭配没有固定公式，需根据关卡特性灵活调整，但核心思路是"覆盖短板、强化优势"，以下是通用阵容框架和实战技巧：</p>
+            
+            <h3>1. 通用阵容框架（适用于90%常规关卡）</h3>
+            <pre><code>// 标准阵容配置（8人核心）
+先锋（2个）：1个挡2回费型 + 1个挡1高速回费型（前期稳场+费用回复）
+狙击（2个）：1个速射狙击 + 1个重狙狙击（对空+对地，覆盖远程输出）
+医疗（1-2个）：1个单体医疗 + 1个群体医疗（应对单体爆发+群体伤害）
+重装（1个）：常规重装或治疗重装（承伤+拦截敌人）
+近卫/术师（2个）：1个地面近卫 + 1个术师（补充地面/法术输出，克制高甲敌人）
+特种/辅助（1个）：根据关卡选择（推拉/减速/削弱，应对特殊机制）
+// 阵容灵活调整原则
+- 高甲敌人关卡：增加术师数量，减少速射狙击
+- 空中敌人密集关卡：增加速射狙击，减少地面近卫
+- 地形复杂关卡：增加特种干员（推拉/位移），利用地形秒杀敌人
+- 高难突袭关卡：增加辅助干员（减速/增伤），提升团队输出上限
+</code></pre>
+            
+            <h3>2. 实战核心技巧</h3>
+            <ul>
+                <li><strong>费用规划技巧</strong>：开局优先部署先锋干员，费用足够后再部署重装/医疗，最后补充输出干员；后期费用溢出时，撤退低费先锋，替换为高费输出干员</li>
+                <li><strong>技能释放时机</strong>：关键技能（如：银灰真银斩、史尔特尔黄昏）需卡在敌人密集波次或精英怪登场时释放，避免空放浪费技力；持续型技能（如：塞雷娅药物配置）需全程保持覆盖</li>
+                <li><strong>地形利用技巧</strong>：将远程干员部署在高处，利用地形优势攻击低处敌人；将推拉特种部署在悬崖/水域旁，直接秒杀敌人；利用障碍物分割敌人阵型，逐个击破</li>
+                <li><strong>干员撤退技巧</strong>：部分干员（如：桃金娘、红）完成任务后可及时撤退，节省部署位；残血干员及时撤退，避免被敌人击杀导致防线崩溃</li>
+            </ul>
+            
+            <h2>四、资源规划与基建运营</h2>
+            <p>明日方舟的资源获取分为"日常刷图"和"基建运营"两部分，合理规划基建布局，能大幅提升资源获取效率，减少刷图时间：</p>
+            
+            <h3>1. 基建布局推荐</h3>
+            <p>基建分为"制造站、贸易站、发电站、宿舍、会客室、训练室"六大模块，不同布局适用于不同阶段：</p>
+            <ul>
+                <li><strong>新手期布局（0-50级）</strong>：2制造站 + 2贸易站 + 1发电站 + 3宿舍 + 1会客室 + 1训练室（优先提升贸易站效率，快速获取龙门币）</li>
+                <li><strong>中期布局（50-80级）</strong>：3制造站 + 2贸易站 + 2发电站 + 4宿舍 + 1会客室 + 1训练室（平衡龙门币和作战记录产出，满足精二需求）</li>
+                <li><strong>后期布局（80级+）</strong>：3制造站 + 1贸易站 + 2发电站 + 5宿舍 + 1会客室 + 2训练室（优先提升制造站效率，生产精英材料，减少刷图次数）</li>
+            </ul>
+            
+            <h3>2. 干员基建技能搭配</h3>
+            <p>不同干员拥有不同的基建技能，合理搭配能提升基建效率30%以上：</p>
+            <pre><code>// 贸易站最优干员搭配（提升龙门币产出）
+- 核心干员：德克萨斯（订单效率+30%）、拉普兰德（订单效率+25%）、可颂（订单上限+1）
+- 搭配组合：德克萨斯 + 拉普兰德 + 可颂（龙门币产出提升80%）
+// 制造站最优干员搭配（提升作战记录/精英材料产出）
+- 作战记录专精：阿米娅（制造效率+30%）、伊芙利特（制造效率+25%）、炎熔（制造效率+20%）
+- 精英材料专精：夜莺（制造效率+30%）、闪灵（制造效率+25%）、华法林（制造效率+20%）
+// 发电站最优干员搭配（提升电力产出）
+- 核心干员：桃金娘（发电效率+30%）、极境（发电效率+25%）、红豆（发电效率+20%）
+</code></pre>
+            
+            <h2>五、危机合约与高难关卡攻略</h2>
+            <p>危机合约是明日方舟的高难度挑战模式，核心思路是"利用词条限制，发挥干员特长"，以下是通用攻略思路：</p>
+            <ol>
+                <li><strong>词条选择技巧</strong>：优先选择"提升敌人属性"的词条（如：攻击力+10%、防御力+10%），避免选择"限制干员部署"的词条（如：禁止部署近卫、限制部署位）；根据己方干员阵容，针对性选择词条</li>
+                <li><strong>核心干员推荐</strong>：危机合约必备干员包括"银灰、史尔特尔、塞雷娅、铃兰、温蒂、红"，这些干员能应对大部分词条限制，发挥关键作用</li>
+                <li><strong>战术思路调整</strong>：高难关卡需放弃常规阵容，采用"功能型干员+核心输出"的搭配思路；利用特种干员（推拉/位移）快速处理精英怪，减少正面战斗压力；利用辅助干员（减速/增伤）提升核心输出效率，快速清场</li>
+            </ol>
+            
+            <div class="tip-box">
+                <h3><i class="fas fa-trophy"></i> 危机合约冲分技巧</h3>
+                <p>1. 提前查看关卡机制和敌人配置，针对性调整干员阵容，避免临场应变</p>
+                <p>2. 合理利用"撤退再部署"机制，让核心干员多次释放关键技能，应对密集波次</p>
+                <p>3. 低练度冲分优先选择"特种队"或"召唤队"，利用功能型干员规避词条限制，降低练度需求</p>
+            </div>
+            
+            <h2>总结</h2>
+            <p>明日方舟是一款需要耐心与策略的游戏，无论是萌新还是老玩家，都能在游戏中找到属于自己的乐趣。总结来说，游戏的核心玩法可以概括为"资源规划、策略搭配、长期积累"三个关键词：</p>
+            <p>1. <strong>资源规划</strong>：合理分配体力与养成资源，优先培养核心干员，避免盲目消耗，基建是长期资源的核心，务必重视；</p>
+            <p>2. <strong>策略搭配</strong>：没有绝对最优的阵容，只有最适合关卡的配置，根据敌人类型、地形、关卡机制灵活调整，善用功能型干员；</p>
+            <p>3. <strong>长期积累</strong>：游戏节奏较慢，不要急于求成，逐步提升练度，参与活动获取稀有奖励，享受养成与挑战的过程。</p>
+            <blockquote>
+                <p>"罗德岛不是一座孤岛，而是所有感染者的希望。我们的战斗，不仅是为了生存，更是为了未来。" - 阿米娅</p>
+            </blockquote>
+          </div>
+        </article>
+        
+        <!-- 文章标签 -->
+        <div class="article-tags">
+          <span class="tag">明日方舟</span>
+          <span class="tag">游戏攻略</span>
+          <span class="tag">干员培养</span>
+          <span class="tag">阵容搭配</span>
+          <span class="tag">危机合约</span>
+          <span class="tag">资源规划</span>
+          <span class="tag">萌新指南</span>
+        </div>
+        
+        <!-- 分享按钮 -->
+        <div class="share-buttons">
+          <h3>分享本文</h3>
+          <div class="share-links">
+            <a href="#" class="share-btn weibo"><i class="fab fa-weibo"></i> 微博</a>
+            <a href="#" class="share-btn wechat"><i class="fab fa-weixin"></i> 微信</a>
+            <a href="#" class="share-btn twitter"><i class="fab fa-twitter"></i> Twitter</a>
+            <a href="#" class="share-btn linkedin"><i class="fab fa-linkedin"></i> LinkedIn</a>
+            <a href="#" class="share-btn qq"><i class="fab fa-qq"></i> QQ空间</a>
+          </div>
+        </div>
+        
+        <!-- 文章导航 -->
+        <div class="article-navigation">
+          <a href="#" class="nav-link prev"><i class="fas fa-chevron-left"></i> 上一篇：碧蓝档案主线12章通关攻略</a>
+          <a href="#" class="nav-link next">下一篇：英雄联盟2026赛季强势英雄推荐 <i class="fas fa-chevron-right"></i></a>
+        </div>
+        
+        <!-- 评论区 -->
+        <div class="comments-section">
+          <h3 class="section-title">评论区（28条评论）</h3>
+          <div class="comment-form">
+            <h4>发表评论</h4>
+            <div class="form-row">
+              <div class="form-group half">
+                <label for="name">昵称 *</label>
+                <input type="text" id="name" class="form-control" placeholder="请输入你的昵称" required>
+              </div>
+              <div class="form-group half">
+                <label for="email">邮箱 *</label>
+                <input type="email" id="email" class="form-control" placeholder="请输入你的邮箱" required>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="comment">评论内容 *</label>
+              <textarea id="comment" class="form-control" rows="5" placeholder="分享你的游戏心得、疑问或补充建议..." required></textarea>
+            </div>
+            <button type="submit" class="btn">提交评论</button>
+          </div>
+          
+          <div class="comment-list">
+            <div class="comment-item">
+              <div class="comment-header">
+                <div class="comment-author">
+                  <img src="https://ts1.tc.mm.bing.net/th/id/OIP-C.JBBuDWvcFecs-PDnlnLS3QAAAA?rs=1&pid=ImgDetMain&o=7&rm=3" alt="头像" class="comment-avatar">
+                  <span>刀客塔</span>
+                  <span class="comment-badge">博主</span>
+                </div>
+                <div class="comment-date">2026-01-10 10:00</div>
+              </div>
+              <div class="comment-body">
+                本文整理了明日方舟从萌新到大佬的全维度攻略，涵盖干员培养、阵容搭配、资源规划、危机合约等核心内容，希望能帮助各位刀客塔快速提升游戏实力！
+              </div>
+              <a href="#" class="comment-reply">回复</a>
+            </div>
+            
+            <div class="comment-item">
+              <div class="comment-header">
+                <div class="comment-author">
+                  <img src="https://ts2.tc.mm.bing.net/th/id/OIP-C.IpndqfEI-Ni4XcpKHq7MzgHaFN?rs=1&pid=ImgDetMain&o=7&rm=3" alt="头像" class="comment-avatar">
+                  <span>萌新瑟瑟发抖</span>
+                </div>
+                <div class="comment-date">2026-01-10 10:30</div>
+              </div>
+              <div class="comment-body">
+                太详细了！终于知道该优先培养哪些干员了，之前浪费了好多资源在低星干员上，哭死！想问一下，零氪玩家要不要抽常规池，还是一直攒玉等限定？
+              </div>
+              <a href="#" class="comment-reply">回复</a>
+            </div>
+            
+            <div class="comment-item">
+              <div class="comment-header">
+                <div class="comment-author">
+                  <img src="https://ts1.tc.mm.bing.net/th/id/OIP-C.JBBuDWvcFecs-PDnlnLS3QAAAA?rs=1&pid=ImgDetMain&o=7&rm=3" alt="头像" class="comment-avatar">
+                  <span>阿米娅小天使</span>
+                  <span class="comment-badge">攻略作者</span>
+                </div>
+                <div class="comment-date">2026-01-10 14:56</div>
+              </div>
+              <div class="comment-body">
+                感谢支持！零氪玩家建议常规池抽到2-3个核心输出（如银灰、能天使）后就停手，后续合成玉优先攒限定池，限定干员错过无法获取，性价比更高～ 另外，低星干员前期过渡很实用，不用完全放弃哦！
+              </div>
+              <a href="#" class="comment-reply">回复</a>
+            </div>
+            
+            <div class="comment-item">
+              <div class="comment-header">
+                <div class="comment-author">
+                  <img src="https://ts2.tc.mm.bing.net/th/id/R-C.7246efde762401c13877d79606f90a7e?rik=kpkPO50SxD56XA&riu=http%3a%2f%2fpic.962.net%2fup%2f2023-8%2f20238251128561014.png&ehk=3S%2b%2fpsBUii10zVXOIW%2bXW1jepa5HrtNBXcPGr7wNEKk%3d&risl=&pid=ImgRaw&r=0" alt="头像" class="comment-avatar">
+                  <span>危机合约冲分人</span>
+                </div>
+                <div class="comment-date">2026-01-11 09:17</div>
+              </div>
+              <div class="comment-body">
+                补充一点危机合约技巧：黄铁峡谷用温蒂把精英怪推下悬崖，能节省大量输出压力！还有巫恋的诅咒娃娃一定要放在敌人密集处，配合史尔特尔黄昏清场效果绝了～
+              </div>
+              <a href="#" class="comment-reply">回复</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- 侧边栏 -->
+      <div class="sidebar">
+        <div class="sidebar-widget">
+          <h3>作者推荐</h3>
+          <ul class="hot-articles">
+            <li><a onclick="switchPage('articles')">英雄联盟：2026赛季全位置强势英雄推荐</a></li>
+            <li><a onclick="switchPage('articles')">碧蓝档案：主线12章通关攻略及角色培养优先级</a></li>
+            <li><a onclick="switchPage('articles')">三角洲行动：PC端最优设置及战术打法指南</a></li>
+            <li><a onclick="switchPage('articles')">前端开发：CSS Grid布局实战教程</a></li>
+          </ul>
+        </div>
+        <div class="sidebar-widget">
+          <h3>攻略目录</h3>
+          <ul class="hot-articles">
+            <li><a href="#1">一、游戏核心机制解析</a></li>
+            <li><a href="#2">二、干员培养全攻略</a></li>
+            <li><a href="#3">三、阵容搭配与实战技巧</a></li>
+            <li><a href="#4">四、资源规划与基建运营</a></li>
+            <li><a href="#5">五、危机合约与高难关卡攻略</a></li>
+          </ul>
+        </div>
+        <div class="sidebar-widget">
+          <h3>近期热门攻略</h3>
+          <ul class="hot-articles">
+            <li><a onclick="switchPage('articles')">明日方舟：2026春节活动干员强度分析</a></li>
+            <li><a onclick="switchPage('articles')">碧蓝档案：新角色"爱丽丝"技能解析与培养指南</a></li>
+            <li><a onclick="switchPage('articles')">英雄联盟：S16赛季打野节奏全攻略</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5. 作品集页面 -->
+  <div class="page-content" id="portfolio">
+    <div class="container">
+      <section class="portfolio-header">
+        <div class="container">
+          <h1 class="section-title">我的作品集</h1>
+          <p class="blog-description">聚焦明日方舟创作、美食制作与网页开发，记录热爱与成长的融合之作，涵盖攻略设计、美食教程、网页实现等多个维度。</p>
+        </div>
+      </section>
+
+      <!-- 项目筛选 -->
+      <div class="portfolio-filter">
+        <button class="portfolio-filter-btn active" data-filter="all">全部项目</button>
+        <button class="portfolio-filter-btn" data-filter="arknights">明日方舟相关</button>
+        <button class="portfolio-filter-btn" data-filter="food">美食制作</button>
+        <button class="portfolio-filter-btn" data-filter="web">网页制作</button>
+      </div>
+
+      <!-- 项目展示 -->
+      <div class="portfolio-grid">
+        <!-- 项目1：明日方舟攻略网站 -->
+        <div class="portfolio-item" data-category="arknights">
+          <div class="portfolio-image">
+            <img src="https://gd-hbimg.huaban.com/a290486f50f9029e5e201f94b5a186f1da2bd2562773-STXtGd_fw658" alt="明日方舟攻略网站">
+            <div class="portfolio-overlay">
+              <a href="#" class="btn">查看详情</a>
+            </div>
+          </div>
+          <div class="portfolio-info">
+            <h3>明日方舟一站式攻略网站</h3>
+            <p>整合干员数据库、关卡攻略、资源规划工具的响应式网站，支持筛选查询、数据可视化，适配PC与移动端。</p>
+            <div class="portfolio-tags">
+              <span class="portfolio-tag">HTML/CSS</span>
+              <span class="portfolio-tag">JavaScript</span>
+              <span class="portfolio-tag">响应式</span>
+              <span class="portfolio-tag">数据可视化</span>
+            </div>
+            <div class="portfolio-links">
+              <a href="#" class="btn btn-outline"><i class="fas fa-eye"></i> 在线演示</a>
+              <a href="#" class="btn"><i class="fab fa-github"></i> 查看源码</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- 项目2：明日方舟干员手书动画 -->
+        <div class="portfolio-item" data-category="arknights">
+          <div class="portfolio-image">
+            <img src="https://gd-hbimg-edge.huaban.com/f03c81cb92b440829a80c5b8e3a3e8e0f7b2af26e80ef-JpIWNQ_fw1200webp?auth_key=1767888000-a063f57236e64f2b9a94e1f022cb3f8f-0-fcc6dcc8e3088c5ccd376d9f631d1a9e" alt="明日方舟干员手书">
+            <div class="portfolio-overlay">
+              <a href="#" class="btn">查看详情</a>
+            </div>
+          </div>
+          <div class="portfolio-info">
+            <h3>明日方舟「罗德岛日常」手书动画</h3>
+            <p>以Q版风格制作的原创手书动画，时长3分钟，涵盖6名核心干员互动剧情，使用AE与PR完成后期制作。</p>
+            <div class="portfolio-tags">
+              <span class="portfolio-tag">Adobe AE</span>
+              <span class="portfolio-tag">PR</span>
+              <span class="portfolio-tag">手绘</span>
+              <span class="portfolio-tag">原创剧情</span>
+            </div>
+            <div class="portfolio-links">
+              <a href="#" class="btn btn-outline"><i class="fas fa-video"></i> 观看视频</a>
+              <a href="#" class="btn"><i class="fas fa-image"></i> 分镜原稿</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- 项目3：明日方舟主题UI设计 -->
+        <div class="portfolio-item" data-category="arknights">
+          <div class="portfolio-image">
+            <img src="https://gd-hbimg-edge.huaban.com/bf2f7b3133b953d4ec292f39f4e99a74d5bb10dd1f094-wRZFbH_fw1200webp?auth_key=1767888000-a063f57236e64f2b9a94e1f022cb3f8f-0-404ab4b2e7bfec9e1a94a7bb5e4df105" alt="明日方舟主题UI">
+            <div class="portfolio-overlay">
+              <a href="#" class="btn">查看详情</a>
+            </div>
+          </div>
+          <div class="portfolio-info">
+            <h3>明日方舟主题移动端UI设计</h3>
+            <p>基于Figma设计的同人移动端UI，包含干员图鉴、关卡导航、资源计算器3大模块，还原游戏视觉风格。</p>
+            <div class="portfolio-tags">
+              <span class="portfolio-tag">Figma</span>
+              <span class="portfolio-tag">UI设计</span>
+              <span class="portfolio-tag">交互原型</span>
+              <span class="portfolio-tag">同人创作</span>
+            </div>
+            <div class="portfolio-links">
+              <a href="#" class="btn btn-outline"></a><i class="fas fa-palette"></i>在线演示</a>
+              <a href="#" class="btn"><i class="fas fa-share-alt"></i> 原型演示</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- 项目4：美食教程网站 -->
+        <div class="portfolio-item" data-category="food">
+          <div class="portfolio-image">
+            <img src="https://gd-hbimg-edge.huaban.com/5c002b002cbec22b3adb34b890d0ddc7c45dd03e50d10-jSoGgy_fw1200webp?auth_key=1767888000-a063f57236e64f2b9a94e1f022cb3f8f-0-ecc76cd082ca3ad7998c6cb9a34e2e43" alt="美食教程网站">
+            <div class="portfolio-overlay">
+              <a href="#" class="btn">查看详情</a>
+            </div>
+          </div>
+          <div class="portfolio-info">
+            <h3>「舌尖上的ACG」美食教程网站</h3>
+            <p>专注游戏/动漫主题美食的教程网站，包含12道原创食谱，支持步骤检索、食材清单导出，响应式布局适配多设备。</p>
+            <div class="portfolio-tags">
+              <span class="portfolio-tag">Vue.js</span>
+              <span class="portfolio-tag">CSS Grid</span>
+              <span class="portfolio-tag">美食摄影</span>
+              <span class="portfolio-tag">教程编写</span>
+            </div>
+            <div class="portfolio-links">
+              <a href="#" class="btn btn-outline"><i class="fas fa-external-link-alt"></i> 访问网站</a>
+              <a href="#" class="btn"><i class="fas fa-book"></i> 食谱合集</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- 项目5：明日方舟主题甜品制作 -->
+        <div class="portfolio-item" data-category="food">
+          <div class="portfolio-image">
+            <img src="https://gd-hbimg-edge.huaban.com/b1aa253beda578a1cf9212ea4f71320a69b535656e826-sF0yQC_fw1200webp?auth_key=1767888000-a063f57236e64f2b9a94e1f022cb3f8f-0-6f3b54075f27318a72831617cdfba202" alt="明日方舟主题甜品">
+            <div class="portfolio-overlay">
+              <a href="#" class="btn">查看详情</a>
+            </div>
+          </div>
+          <div class="portfolio-info">
+            <h3>明日方舟「罗德岛主题甜品」系列</h3>
+            <p>以干员元素为灵感的3款原创甜品（霜星慕斯、能天使马卡龙、阿米娅纸杯蛋糕），含制作视频与步骤图解。</p>
+            <div class="portfolio-tags">
+              <span class="portfolio-tag">甜品制作</span>
+              <span class="portfolio-tag">美食摄影</span>
+              <span class="portfolio-tag">原创配方</span>
+              <span class="portfolio-tag">主题创作</span>
+            </div>
+            <div class="portfolio-links">
+              <a href="#" class="btn btn-outline"><i class="fas fa-play-circle"></i> 制作视频</a>
+              <a href="#" class="btn"><i class="fas fa-utensils"></i> 配方下载</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- 项目6：个人博客网页制作 -->
+        <div class="portfolio-item" data-category="web">
+          <div class="portfolio-image">
+            <img src="https://gd-hbimg-edge.huaban.com/baca040ccfa8a159091cd0595979b1c0fe6aca0b4f1e-JUfRii_fw1200webp?auth_key=1767888000-a063f57236e64f2b9a94e1f022cb3f8f-0-41ac10707a8d6290f46b87c48f06ee19" alt="个人博客">
+            <div class="portfolio-overlay">
+              <a href="#" class="btn">查看详情</a>
+            </div>
+          </div>
+          <div class="portfolio-info">
+            <h3>个人游戏&美食博客网站</h3>
+            <p>整合文章发布、作品展示、留言互动的全功能博客，使用HTML/CSS/JavaScript开发，支持黑夜模式切换。</p>
+            <div class="portfolio-tags">
+              <span class="portfolio-tag">HTML5</span>
+              <span class="portfolio-tag">CSS3</span>
+              <span class="portfolio-tag">JavaScript</span>
+              <span class="portfolio-tag">响应式</span>
+            </div>
+            <div class="portfolio-links">
+              <a href="#" class="btn btn-outline"><i class="fas fa-globe"></i> 访问博客</a>
+              <a href="#" class="btn"><i class="fab fa-github"></i> 源码仓库</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- 项目7：美食食谱管理系统 -->
+        <div class="portfolio-item" data-category="web">
+          <div class="portfolio-image">
+            <img src="https://gd-hbimg-edge.huaban.com/91948d336f28f79a7232361935ce404268a4d246289ae1-Awbp1r_fw1200webp?auth_key=1767888000-a063f57236e64f2b9a94e1f022cb3f8f-0-ccb112ffd0fc02b7f1313c4809f73087" alt="食谱管理系统">
+            <div class="portfolio-overlay">
+              <a href="#" class="btn">查看详情</a>
+            </div>
+          </div>
+          <div class="portfolio-info">
+            <h3>美食食谱管理系统</h3>
+            <p>支持食谱录入、分类检索、食材库存管理的Web应用，包含后台管理界面，使用Node.js+MongoDB实现数据存储。</p>
+            <div class="portfolio-tags">
+              <span class="portfolio-tag">Node.js</span>
+              <span class="portfolio-tag">MongoDB</span>
+              <span class="portfolio-tag">Express</span>
+              <span class="portfolio-tag">CRUD</span>
+            </div>
+            <div class="portfolio-links">
+              <a href="#" class="btn btn-outline"><i class="fas fa-cog"></i> 后台演示</a>
+              <a href="#" class="btn"><i class="fab fa-github"></i> 查看源码</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- 项目8：明日方舟角色图鉴网页 -->
+        <div class="portfolio-item" data-category="web">
+          <div class="portfolio-image">
+            <img src="https://gd-hbimg-edge.huaban.com/fd4608c275573ed3d2ce9f1c57f0a0accc08792a258e3-6OECgU_fw1200webp?auth_key=1767888000-a063f57236e64f2b9a94e1f022cb3f8f-0-98cba1461d59802fd5e127b7301fce95" alt="角色图鉴网页">
+            <div class="portfolio-overlay">
+              <a href="#" class="btn">查看详情</a>
+            </div>
+          </div>
+          <div class="portfolio-info">
+            <h3>明日方舟角色图鉴网页</h3>
+            <p>包含120+干员数据的图鉴网页，支持按职业、星级、阵营筛选，实现干员属性对比、技能预览功能。</p>
+            <div class="portfolio-tags">
+              <span class="portfolio-tag">JavaScript</span>
+              <span class="portfolio-tag">JSON</span>
+              <span class="portfolio-tag">筛选功能</span>
+              <span class="portfolio-tag">数据可视化</span>
+            </div>
+            <div class="portfolio-links">
+              <a href="#" class="btn btn-outline"><i class="fas fa-search"></i> 在线查询</a>
+              <a href="#" class="btn"><i class="fas fa-database"></i> 数据接口</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 项目统计 -->
+      <div class="portfolio-stats">
+        <div class="stats-grid">
+          <div class="stat-item">
+            <div class="stat-number" data-count="18">0</div>
+            <div class="stat-label">完成项目</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-number" data-count="6">0</div>
+            <div class="stat-label">明日方舟相关</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-number" data-count="5">0</div>
+            <div class="stat-label">美食制作</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-number" data-count="7">0</div>
+            <div class="stat-label">网页制作</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-number" data-count="32">0</div>
+            <div class="stat-label">原创食谱/教程</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 创作流程 -->
+      <section class="process-section">
+        <h2 class="section-title">我的创作流程</h2>
+        <div class="process-steps">
+          <div class="process-step">
+            <div class="step-icon">
+            <i class="fas fa-lightbulb"></i>
+            </div>
+            <h3>1. 灵感构思</h3>
+            <p>结合兴趣方向（明日方舟/美食/网页），明确创作主题与核心需求，收集参考资料。</p>
+          </div>
+          <div class="process-step">
+            <div class="step-icon">
+              <i class="fas fa-pencil-ruler"></i>
+            </div>
+            <h3>2. 规划设计</h3>
+            <p>制定详细方案，包含内容框架、视觉风格、技术选型，输出草图或原型。</p>
+          </div>
+          <div class="process-step">
+            <div class="step-icon">
+              <i class="fas fa-tools"></i>
+            </div>
+            <h3>3. 创作实现</h3>
+            <p>按计划执行制作，注重细节打磨，及时调整优化，确保作品质量。</p>
+          </div>
+          <div class="process-step">
+            <div class="step-icon">
+              <i class="fas fa-camera"></i>
+            </div>
+            <h3>4. 记录展示</h3>
+            <p>通过摄影、录屏等方式记录成果，整理制作过程，完成作品展示。</p>
+          </div>
+          <div class="process-step">
+            <div class="step-icon">
+              <i class="fas fa-comments"></i>
+            </div>
+            <h3>5. 反馈迭代</h3>
+            <p>收集用户反馈，总结经验，对作品进行优化迭代，持续提升创作水平。</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 技术栈 -->
+      <section class="tech-stack-section">
+        <h2 class="section-title">创作技术栈</h2>
+        <div class="tech-categories">
+          <div class="tech-category">
+            <h3><i class="fas fa-code"></i> 网页开发技术</h3>
+            <div class="tech-tags">
+              <span class="tech-tag">HTML5/CSS3</span>
+              <span class="tech-tag">JavaScript (ES6+)</span>
+              <span class="tech-tag">Vue.js</span>
+              <span class="tech-tag">Node.js</span>
+              <span class="tech-tag">MongoDB</span>
+              <span class="tech-tag">响应式布局</span>
+              <span class="tech-tag">CSS Grid/Flex</span>
+              <span class="tech-tag">Git</span>
+            </div>
+          </div>
+          
+          <div class="tech-category">
+            <h3><i class="fas fa-palette"></i> 设计创作工具</h3>
+            <div class="tech-tags">
+              <span class="tech-tag">Figma</span>
+              <span class="tech-tag">Adobe Photoshop</span>
+              <span class="tech-tag">Adobe Illustrator</span>
+              <span class="tech-tag">Adobe AE</span>
+              <span class="tech-tag">Adobe PR</span>
+              <span class="tech-tag">手绘板绘画</span>
+              <span class="tech-tag">美食摄影</span>
+              <span class="tech-tag">视频剪辑</span>
+            </div>
+          </div>
+          
+          <div class="tech-category">
+            <h3><i class="fas fa-utensils"></i> 美食制作技能</h3>
+            <div class="tech-tags">
+              <span class="tech-tag">甜品烘焙</span>
+              <span class="tech-tag">中餐烹饪</span>
+              <span class="tech-tag">创意摆盘</span>
+              <span class="tech-tag">食材搭配</span>
+              <span class="tech-tag">食谱编写</span>
+              <span class="tech-tag">美食摄影</span>
+              <span class="tech-tag">视频教程制作</span>
+            </div>
+          </div>
+          
+          <div class="tech-category">
+            <h3><i class="fas fa-gamepad"></i> 明日方舟创作技能</h3>
+            <div class="tech-tags">
+              <span class="tech-tag">角色设计</span>
+              <span class="tech-tag">剧情编写</span>
+              <span class="tech-tag">手书动画</span>
+              <span class="tech-tag">UI还原</span>
+              <span class="tech-tag">攻略撰写</span>
+              <span class="tech-tag">数据整理</span>
+              <span class="tech-tag">同人创作</span>
+            </div>
+          </div>
+        </div>
+      </section>
+      
+      <!-- 合作邀请 -->
+      <section class="collaboration-section">
+        <div class="collaboration-content">
+          <h2>寻找志同道合的创作者</h2>
+          <p>如果你热爱明日方舟、美食制作或网页开发，欢迎一起合作创作！无论是同人项目、技术交流还是商业合作，都期待你的联系。</p>
+          <a href="#about" onclick="switchPage('about')" class="btn">开始合作</a>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <!-- 页脚 -->
+  <footer>
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-about">
+          <a href="#" class="footer-logo">李浩霖的博客</a>
+          <p>专注于游戏攻略、前端开发与生活分享的个人博客，希望能通过文字与大家交流，共同成长。融合游戏热爱、美食创作与技术探索，记录每一份热爱的落地。</p>
+          <div class="footer-social">
+            <a href="#"><i class="fab fa-weibo"></i></a>
+            <a href="#"><i class="fab fa-weixin"></i></a>
+            <a href="#"><i class="fab fa-qq"></i></a>
+            <a href="#"><i class="fab fa-github"></i></a>
+          </div>
+        </div>
+        <div class="footer-links">
+          <h4>导航菜单</h4>
+          <ul>
+            <li><a onclick="switchPage('home')">首页</a></li>
+            <li><a onclick="switchPage('articles')">文章列表</a></li>
+            <li><a onclick="switchPage('portfolio')">作品集</a></li>
+            <li><a onclick="switchPage('about')">关于我</a></li>
+            <li><a onclick="switchPage('arknights-guide')">明日方舟攻略</a></li>
+          </ul>
+        </div>
+        <div class="footer-links">
+          <h4>分类目录</h4>
+          <ul>
+            <li><a href="#" onclick="filterArticle('游戏攻略')">游戏攻略</a></li>
+            <li><a href="#" onclick="filterArticle('前端技术')">前端技术</a></li>
+            <li><a href="#" onclick="filterArticle('生活分享')">生活分享</a></li>
+            <li><a href="#" onclick="filterArticle('动漫杂谈')">动漫杂谈</a></li>
+            <li><a href="#" onclick="filterArticle('美食制作')">美食制作</a></li>
+          </ul>
+        </div>
+        <div class="footer-newsletter">
+          <h4>订阅博客</h4>
+          <p>输入你的邮箱，获取最新文章推送</p>
+          <form>
+            <input type="email" class="form-control" placeholder="请输入你的邮箱">
+            <button type="submit" class="btn">订阅</button>
+          </form>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2026 李浩霖的博客 版权所有 | 备案号：渝ICP备XXXXXXXX号</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- JavaScript 完整交互逻辑 -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+  <script>
+    // 页面切换功能
+    function switchPage(pageId) {
+      // 隐藏所有页面
+      document.querySelectorAll('.page-content').forEach(page => {
+        page.classList.remove('active');
+      });
+      // 显示目标页面
+      document.getElementById(pageId).classList.add('active');
+      // 更新导航激活状态（桌面端）
+      document.querySelectorAll('.desktop-nav a').forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('onclick').includes(pageId)) {
+          link.classList.add('active');
+        }
+      });
+      // 更新导航激活状态（移动端）
+      document.querySelectorAll('.mobile-nav a').forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('onclick').includes(pageId)) {
+          link.classList.add('active');
+        }
+      });
+      // 收起移动端菜单
+      document.getElementById('mobileNav').style.display = 'none';
+      // 滚动到顶部
+      window.scrollTo(0, 0);
+    }
+
+    // 移动端菜单切换
+    function toggleMobileMenu() {
+      const mobileNav = document.getElementById('mobileNav');
+      mobileNav.style.display = mobileNav.style.display === 'block' ? 'none' : 'block';
+    }
+
+    // 代码高亮
+    hljs.highlightAll();
+
+    // 文章列表筛选功能
+    function filterArticle(category) {
+      switchPage('articles');
+      setTimeout(() => {
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+          if (btn.textContent === category) {
+            btn.click();
+          }
+        });
+      }, 100);
+      return false;
+    }
+
+    // 文章列表筛选按钮事件
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+        const filterText = this.textContent;
+        document.querySelectorAll('.article-item').forEach(item => {
+          const itemCategory = item.querySelector('.article-item-meta span:nth-child(2)').textContent.split('：')[1];
+          if (filterText === '全部分类' || itemCategory === filterText) {
+            item.style.display = 'flex';
+            item.style.opacity = '1';
+          } else {
+            item.style.opacity = '0';
+            setTimeout(() => {
+              item.style.display = 'none';
+            }, 300);
+          }
+        });
+      });
+    });
+
+    // 分页按钮事件
+    document.querySelectorAll('.pagination-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        document.querySelectorAll('.pagination-btn').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+      });
+    });
+
+    // 作品集筛选功能
+    document.querySelectorAll('.portfolio-filter-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        document.querySelectorAll('.portfolio-filter-btn').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+        const filter = this.dataset.filter;
+        document.querySelectorAll('.portfolio-item').forEach(item => {
+          if (filter === 'all' || item.dataset.category === filter) {
+            item.style.display = 'block';
+            setTimeout(() => {
+              item.style.opacity = '1';
+              item.style.transform = 'translateY(0)';
+            }, 50);
+          } else {
+            item.style.opacity = '0';
+            item.style.transform = 'translateY(20px)';
+            setTimeout(() => {
+              item.style.display = 'none';
+            }, 300);
+          }
+        });
+      });
+    });
+
+    // 数字统计动画
+    document.addEventListener('DOMContentLoaded', function() {
+      const statNumbers = document.querySelectorAll('.stat-number');
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const statNumber = entry.target;
+            const target = parseInt(statNumber.dataset.count);
+            const duration = 2000;
+            const step = target / (duration / 16);
+            let current = 0;
+            const timer = setInterval(() => {
+              current += step;
+              if (current >= target) {
+                current = target;
+                clearInterval(timer);
+              }
+              statNumber.textContent = Math.floor(current);
+            }, 16);
+            observer.unobserve(statNumber);
+          }
+        });
+      }, { threshold: 0.5 });
+      statNumbers.forEach(number => {
+        observer.observe(number);
+      });
+    });
+
+    // 评论表单提交事件
+    document.querySelector('.comment-form form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      alert('评论提交成功！感谢你的分享～');
+      this.reset();
+    });
+  </script>
+</body>
+</html>
